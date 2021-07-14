@@ -10,5 +10,7 @@ class GetInput:
         self.ra, self.dec  = input("Please Enter equatorial coordinates (ra, dec): ").split()
         self.fov_h, self.fov_v = input("Please Enter horizontal and vertical FOV: ").split()
         self.N = input("Please Enter the number of Stars N: ")
+
+
     def show(self):
         print(self.ra, self.dec, self.fov_h, self.fov_v, self.N, end = ' ')

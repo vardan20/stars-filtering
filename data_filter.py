@@ -4,6 +4,7 @@ import get_input
 
 characteristics = [] #all characteristics of stars, such as RA, DEC, etc.
 star_cnt = 0 #number of stars in table
+
 def read(filename):
     global characteristics
     global star_cnt
@@ -35,7 +36,6 @@ def filter_by_fov(table, ra: float, dec: float, fov_h: float, fov_v: float):
         d1 = abs(float(table['ra_ep2000'][i])-ra)
         if d1>180:
             d1 = 360-d1
-
         # d2 is the DEC distance between the given coordinate and i-th star
         d2 = abs(float(table['dec_ep2000'][i])-dec)
 
@@ -45,10 +45,14 @@ def filter_by_fov(table, ra: float, dec: float, fov_h: float, fov_v: float):
         if d2>fov_v/2:
             continue
         star_cnt_new+=1
+
         for x in characteristics:
             table_modifed[x].append(table[x][i])
+
     star_cnt = star_cnt_new
     return table_modifed
+
+
 class DataFilter:
     def run(self):
         print("Data Filter process is started")
