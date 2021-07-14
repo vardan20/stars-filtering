@@ -1,5 +1,6 @@
 import logging
 import csv
+import get_input
 
 characteristics = [] #all characteristics of stars, such as RA, DEC, etc.
 
@@ -25,5 +26,8 @@ class DataFilter:
     def run(self):
         print("Data Filter process is started")
         table = read("337.all.tsv")
+        inp = get_input.GetInput()
+        inp.input()
+        inp.show()
         #print(table['ra_ep2000'][0:5])
         #print(characteristics)
