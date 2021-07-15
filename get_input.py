@@ -1,5 +1,10 @@
 
 class GetInput:
+    '''
+    GetInput class organizes user input,
+    input() and show() methods are implemented,
+    which read and print user data
+    '''
     # def __init__(self, ra, dec, fov_h,fov_v, N):
     #     self.ra = ra
     #     self.dec = dec

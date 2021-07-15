@@ -6,6 +6,11 @@ characteristics = [] #all characteristics of stars, such as RA, DEC, etc.
 star_cnt = 0 #number of stars in table
 
 def read(filename):
+    '''
+    The read() function takes a filename as a parameter,
+    and stores the information of that file in a
+    dictionary, and returns it.
+    '''
     global characteristics
     global star_cnt
     with open(filename) as fd:
@@ -26,6 +31,10 @@ def read(filename):
 
 
 def filter_by_fov(table, ra: float, dec: float, fov_h: float, fov_v: float):
+    '''
+    The filter_by_fov function filters the table of stars
+    and keeps the stars which are located in given FOV
+    '''
     global star_cnt
     table_modifed = {}
     star_cnt_new = 0
