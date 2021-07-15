@@ -53,6 +53,37 @@ def filter_by_fov(table, ra: float, dec: float, fov_h: float, fov_v: float):
     return table_modifed
 
 
+def sort(table,n,sort_arg):
+    '''
+    Quicksort algorithm is implemented in this function,
+    It takes 3 arguments: dictionary, number of stars,
+    and the characteristic by which table will be sorted.
+    '''
+    if n<=1:
+        return table
+    pivot = table[sort_arg][n//2]
+    left, middle, right, ans = {},{},{},{}
+    for i in characteristics:
+        left[i], middle[i], right[i], ans[i] = [], [], [], []
+    for id in range(n):
+        x = table[sort_arg][id]
+        if x<pivot:
+            for i in characteristics:
+                left[i].append(table[i][id])
+        elif x == pivot:
+            for i in characteristics:
+                middle[i].append(table[i][id])
+        else:
+            for i in characteristics:
+                right[i].append(table[i][id])
+
+    left = sort(left, len(left[sort_arg]), sort_arg)
+    right = sort(right, len(right[sort_arg]), sort_arg)
+    for i in characteristics:
+        ans[i] = left[i]+middle[i]+right[i]
+    return ans
+
+
 class DataFilter:
     def run(self):
         print("Data Filter process is started")
@@ -60,4 +91,7 @@ class DataFilter:
         inp = get_input.GetInput()
         inp.input()
         table = filter_by_fov(table, float(inp.ra), float(inp.dec), float(inp.fov_h), float(inp.fov_v))
-        print("After FOV filtering {} stars are left".format(star_cnt))
+        #print("After FOV filtering {} stars are left".format(star_cnt))
+        table = sort(table,star_cnt,'phot_g_mean_mag')
+        # for i in range(star_cnt):
+        #      print(table['ra_ep2000'][i],table['phot_g_mean_mag'][i])
