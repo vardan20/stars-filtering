@@ -5,30 +5,6 @@ import get_input
 characteristics = [] #all characteristics of stars, such as RA, DEC, etc.
 star_cnt = 0 #number of stars in table
 
-def read(filename):
-    '''
-    The read() function takes a filename as a parameter,
-    and stores the information of that file in a
-    dictionary, and returns it.
-    '''
-    global characteristics
-    global star_cnt
-    with open(filename) as fd:
-        rd = csv.reader(fd, delimiter="\t", quotechar='"')
-        next(rd)
-        characteristics = (next(rd))
-        dct = {}
-        for cur_char in characteristics:
-            dct[cur_char] = []
-        for row in rd:
-            char_id = 0
-            star_cnt+=1
-            for cur_char in characteristics:
-                dct[cur_char].append(row[char_id])
-                char_id += 1
-
-    return dct
-
 
 def filter_by_fov(table, ra: float, dec: float, fov_h: float, fov_v: float):
     '''
@@ -96,11 +72,11 @@ def sort(table,n,sort_arg):
 class DataFilter:
     def run(self):
         print("Data Filter process is started")
-        table = read("337.all.tsv")
         inp = get_input.GetInput()
         inp.input()
+        table = inp.read_store('337.all.tsv')
         table = filter_by_fov(table, float(inp.ra), float(inp.dec), float(inp.fov_h), float(inp.fov_v))
         #print("After FOV filtering {} stars are left".format(star_cnt))
         table = sort(table,star_cnt,'phot_g_mean_mag')
-        # for i in range(star_cnt):
-        #      print(table['ra_ep2000'][i],table['phot_g_mean_mag'][i])
+        for i in range(star_cnt):
+              print(table['ra_ep2000'][i],table['phot_g_mean_mag'][i])

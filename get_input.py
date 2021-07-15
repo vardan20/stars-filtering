@@ -1,3 +1,5 @@
+import csv
+import data_filter
 
 class GetInput:
     '''
@@ -19,3 +21,28 @@ class GetInput:
 
     def show(self):
         print(self.ra, self.dec, self.fov_h, self.fov_v, self.N, end = ' ')
+
+
+    def read_store(self,filename):
+
+        '''
+        The read_store() function takes a filename as a parameter,
+        and stores the information of that file in a
+        dictionary, and returns it.
+        '''
+
+        with open(filename) as fd:
+            rd = csv.reader(fd, delimiter="\t", quotechar='"')
+            next(rd)
+            data_filter.characteristics = (next(rd))
+            dct = {}
+            for cur_char in data_filter.characteristics:
+                dct[cur_char] = []
+            for row in rd:
+                char_id = 0
+                data_filter.star_cnt += 1
+                for cur_char in data_filter.characteristics:
+                    dct[cur_char].append(row[char_id])
+                    char_id += 1
+
+        return dct
