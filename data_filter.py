@@ -2,7 +2,8 @@ import logging
 import csv
 import get_input
 import star
-
+import time
+from datetime import datetime
 
 characteristics = [] #all characteristics of stars, such as RA, DEC, etc.
 star_cnt = 0 #number of stars in table
@@ -49,9 +50,15 @@ def sort(table,n,sort_arg):
     if n<=1:
         return table
     pivot = table[sort_arg][n//2]
-    left, middle, right, ans = {},{},{},{}
+    left = {}
+    middle = {}
+    right = {}
+    ans = {}
     for i in characteristics:
-        left[i], middle[i], right[i], ans[i] = [], [], [], []
+        left[i] = []
+        middle[i] = []
+        right[i] = []
+        ans[i] = []
     for id in range(n):
         x = table[sort_arg][id]
         if x<pivot:
@@ -77,10 +84,10 @@ class DataFilter:
         print("Data Filter process is started")
         inp = get_input.GetInput()
         inp.input()
-        table = inp.read_store('337.all.tsv')
+        table = inp.read_store('cleaned_stars.tsv')
         table = filter_by_fov(table, float(inp.ra), float(inp.dec), float(inp.fov_h), float(inp.fov_v))
         #print("After FOV filtering {} stars are left".format(star_cnt))
-
+        #print(characteristics)
         table = sort(table,star_cnt,'phot_g_mean_mag') # sort stars by magnitude
 
         '''
@@ -107,5 +114,7 @@ class DataFilter:
         #       print(table['ra_ep2000'][i],table['phot_g_mean_mag'][i], table['dist'][i])
         # print(star_cnt)
         table = sort(table,star_cnt,'dist')
-        for i in range(star_cnt):
-            print(table['ra_ep2000'][i],table['phot_g_mean_mag'][i], table['dist'][i])
+        #for i in range(star_cnt):
+            #print(table['ra_ep2000'][i],table['phot_g_mean_mag'][i], table['dist'][i])
+
+        inp.write(table,star_cnt, str(str(datetime.now())+'.csv'))
