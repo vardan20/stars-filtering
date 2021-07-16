@@ -1,6 +1,8 @@
 import logging
 import csv
 import get_input
+import star
+
 
 characteristics = [] #all characteristics of stars, such as RA, DEC, etc.
 star_cnt = 0 #number of stars in table
@@ -71,12 +73,25 @@ def sort(table,n,sort_arg):
 
 class DataFilter:
     def run(self):
+        global star_cnt
         print("Data Filter process is started")
+        # s1 = star.Star(101.28,-16.71)
+        # s2 = star.Star(24.43, -57.2)
+        # print(star.ang_dist(s1,s2))
         inp = get_input.GetInput()
         inp.input()
         table = inp.read_store('337.all.tsv')
         table = filter_by_fov(table, float(inp.ra), float(inp.dec), float(inp.fov_h), float(inp.fov_v))
         #print("After FOV filtering {} stars are left".format(star_cnt))
+
         table = sort(table,star_cnt,'phot_g_mean_mag')
+
+        # This statement checks if we have more than N stars left,
+        # if we do, we need to take the brightest N ones
+        if inp.N<star_cnt:
+            star_cnt = inp.N
+            for it in characteristics:
+                table[it] = table[it][0:star_cnt]
+
         for i in range(star_cnt):
               print(table['ra_ep2000'][i],table['phot_g_mean_mag'][i])
