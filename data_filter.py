@@ -81,6 +81,12 @@ def sort(table,n,sort_arg):
 
 class DataFilter:
     def run(self):
+        '''
+        run method starts filtering process.
+        All filtering functions are called here,
+        and almost all important objects are created
+        here in this file
+        '''
         global star_cnt
         global characteristics
         print("Data Filter process is started")
@@ -90,9 +96,10 @@ class DataFilter:
         table = inp.read_store('cleaned_stars.tsv')
         table_0 = table
         characteristics = ['id','phot_g_mean_mag']
+
+        # filter by FOV
         table = filter_by_fov(table, float(inp.ra), float(inp.dec), float(inp.fov_h), float(inp.fov_v))
-        #print("After FOV filtering {} stars are left".format(star_cnt))
-        #print(characteristics)
+
         table = sort(table,star_cnt,'phot_g_mean_mag') # sort stars by magnitude
 
         '''
@@ -115,13 +122,9 @@ class DataFilter:
             table['dist'].append(star.ang_dist(star.Star(inp.ra,inp.dec),
                                      star.Star(float(table_0['ra_ep2000'][table['id'][i]]),float(table_0['dec_ep2000'][table['id'][i]]))))
 
-        # for i in range(star_cnt):
-        #       print(table['ra_ep2000'][i],table['phot_g_mean_mag'][i], table['dist'][i])
-        # print(star_cnt)
         table = sort(table,star_cnt,'dist')
-        #for i in range(star_cnt):
-            #print(table['ra_ep2000'][i],table['phot_g_mean_mag'][i], table['dist'][i])
 
         inp.write(table,table_0, star_cnt, str(str(datetime.now())+'.csv'))
+
         end_time = time.time()
         print('Execution time: ',end_time-start_time, 'Sec')

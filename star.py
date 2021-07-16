@@ -1,5 +1,6 @@
 import math
 
+
 class Star:
 
     def __init__(self, ra = 0, dec = 0):

@@ -4,7 +4,7 @@ This project parses database of stars given in .tsv format and perform filtering
 ## Setup
 To run this project, directly clone or add all modules in your local machine, then run 'main'.
 It will ask for input data, please input all required data (first line: ra, dec; second line: fov_h and fov_v; third line: N).
-Make sure the program takes data from the right file. It reads 'cleaned_stars.tsv' (the big one) by default. If you want to change the file, go to module data_filter.py, line 90, and change filename. 
+Make sure the program takes data from the right file. It reads 'cleaned_stars.tsv' (the big one) by default. If you want to change the file, go to module data_filter.py, line 96, and change filename. 
 ## Output
 When the program execution is done, it prints the time of execution, creates .csv file with a name of current timestamp and puts filtered data in that file.
 ## Additional Info

@@ -1,6 +1,7 @@
 import csv
 import data_filter
 
+
 class GetInput:
     '''
     GetInput class organizes user input,
@@ -9,30 +10,25 @@ class GetInput:
     store data in dictionary, and writes final form
     in a new csv file
     '''
-    # def __init__(self, ra, dec, fov_h,fov_v, N):
-    #     self.ra = ra
-    #     self.dec = dec
-    #     self.fov_h = fov_h
-    #     self.fov_v = fov_v
-    #     self.N = N
+
     def input(self):
+        # takes all requried input from user
         self.ra, self.dec  = input("Please Enter equatorial coordinates (ra, dec): ").split()
         self.fov_h, self.fov_v = input("Please Enter horizontal and vertical FOV: ").split()
         self.N = int(input("Please Enter the number of Stars N: "))
 
 
     def show(self):
+        # prints user input data
         print(self.ra, self.dec, self.fov_h, self.fov_v, self.N, end = ' ')
 
 
     def read_store(self,filename):
-
         '''
-        The read_store() function takes a filename as a parameter,
+        The read_store() method takes a filename as a parameter,
         and stores the information of that file in a
         dictionary, and returns it.
         '''
-
         with open(filename) as fd:
             rd = csv.reader(fd, delimiter="\t", quotechar='"')
             next(rd)
@@ -55,6 +51,10 @@ class GetInput:
 
 
     def write(self, table,table_0, n, filename):
+        '''
+        write method take data from the filtered table and
+        writes it in filename.csv file
+        '''
         f = open(filename,'w')
         writer = csv.writer(f)
         row = ['id','source_id','ra_ep2000', 'dec_ep2000','phot_g_mean_mag','angular_distance']
