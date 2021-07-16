@@ -3,8 +3,8 @@ import math
 class Star:
 
     def __init__(self, ra = 0, dec = 0):
-        self.ra = ra
-        self.dec = dec
+        self.ra = float(ra)
+        self.dec = float(dec)
 
 
 def ang_dist(s1: Star, s2: Star):
