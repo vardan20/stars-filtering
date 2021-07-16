@@ -4,8 +4,10 @@ import data_filter
 class GetInput:
     '''
     GetInput class organizes user input,
-    input() and show() methods are implemented,
-    which read and print user data
+    input(), show(), read_store() and write()
+    methods are implemented, which read and print user data,
+    store data in dictionary, and writes final form
+    in a new csv file
     '''
     # def __init__(self, ra, dec, fov_h,fov_v, N):
     #     self.ra = ra
@@ -52,13 +54,15 @@ class GetInput:
         return dct
 
 
-    def write(self, table, n, filename):
+    def write(self, table,table_0, n, filename):
         f = open(filename,'w')
         writer = csv.writer(f)
-        row = ['id','source_id', 'ra_ep2000', 'dec_ep2000', 'phot_g_mean_mag', 'angular_distance']
+        row = ['id','source_id','ra_ep2000', 'dec_ep2000','phot_g_mean_mag','angular_distance']
         writer.writerow(row)
+        table['source_id'] = []
         for i in range(n):
-            row = [table['id'][i],table['source_id'][i], table['ra_ep2000'][i], table['dec_ep2000'][i],
+            row = [table['id'][i],table_0['source_id'][table['id'][i]],
+                   table_0['ra_ep2000'][table['id'][i]], table_0['dec_ep2000'][table['id'][i]],
                    table['phot_g_mean_mag'][i], table['dist'][i]]
             writer.writerow(row)
         f.close()

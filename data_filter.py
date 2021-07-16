@@ -5,6 +5,7 @@ import star
 import time
 from datetime import datetime
 
+
 characteristics = [] #all characteristics of stars, such as RA, DEC, etc.
 star_cnt = 0 #number of stars in table
 
@@ -81,10 +82,14 @@ def sort(table,n,sort_arg):
 class DataFilter:
     def run(self):
         global star_cnt
+        global characteristics
         print("Data Filter process is started")
         inp = get_input.GetInput()
         inp.input()
+        start_time = time.time()
         table = inp.read_store('cleaned_stars.tsv')
+        table_0 = table
+        characteristics = ['id','phot_g_mean_mag']
         table = filter_by_fov(table, float(inp.ra), float(inp.dec), float(inp.fov_h), float(inp.fov_v))
         #print("After FOV filtering {} stars are left".format(star_cnt))
         #print(characteristics)
@@ -108,7 +113,7 @@ class DataFilter:
         characteristics.append('dist')
         for i in range(star_cnt):
             table['dist'].append(star.ang_dist(star.Star(inp.ra,inp.dec),
-                                     star.Star(float(table['ra_ep2000'][i]),float(table['dec_ep2000'][i]))))
+                                     star.Star(float(table_0['ra_ep2000'][table['id'][i]]),float(table_0['dec_ep2000'][table['id'][i]]))))
 
         # for i in range(star_cnt):
         #       print(table['ra_ep2000'][i],table['phot_g_mean_mag'][i], table['dist'][i])
@@ -117,4 +122,6 @@ class DataFilter:
         #for i in range(star_cnt):
             #print(table['ra_ep2000'][i],table['phot_g_mean_mag'][i], table['dist'][i])
 
-        inp.write(table,star_cnt, str(str(datetime.now())+'.csv'))
+        inp.write(table,table_0, star_cnt, str(str(datetime.now())+'.csv'))
+        end_time = time.time()
+        print('Execution time: ',end_time-start_time, 'Sec')
