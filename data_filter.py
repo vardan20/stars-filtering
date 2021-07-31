@@ -2,6 +2,10 @@ import in_out
 import star
 import time
 from datetime import datetime
+from configparser import ConfigParser
+
+config = ConfigParser()
+config.read('config.ini')
 
 
 characteristics = []  #all characteristics of stars, such as RA, DEC, etc.
@@ -90,7 +94,7 @@ class DataFilter:
         print("Data Filter process is started")
         inp = in_out.get_in()
         start_time = time.time()
-        table = in_out.read_store('cleaned_stars.tsv')
+        table = in_out.read_store(config['DEFAULT']['file_name'])
         table_0 = table
         characteristics = ['id', 'phot_g_mean_mag']
 
