@@ -1,13 +1,11 @@
-import logging
-import csv
 import get_input
 import star
 import time
 from datetime import datetime
 
 
-characteristics = [] #all characteristics of stars, such as RA, DEC, etc.
-star_cnt = 0 #number of stars in table
+characteristics = []  #all characteristics of stars, such as RA, DEC, etc.
+star_cnt = 0  #number of stars in table
 
 
 def filter_by_fov(table, ra: float, dec: float, fov_h: float, fov_v: float):
@@ -29,11 +27,11 @@ def filter_by_fov(table, ra: float, dec: float, fov_h: float, fov_v: float):
         d2 = abs(float(table['dec_ep2000'][i])-dec)
 
         # this two if-statements check if i-th star is in FOV or not
-        if d1>fov_h/2:
+        if d1 > fov_h/2:
             continue
-        if d2>fov_v/2:
+        if d2 > fov_v/2:
             continue
-        star_cnt_new+=1
+        star_cnt_new += 1
 
         for x in characteristics:
             table_modifed[x].append(table[x][i])
@@ -42,13 +40,13 @@ def filter_by_fov(table, ra: float, dec: float, fov_h: float, fov_v: float):
     return table_modifed
 
 
-def sort(table,n,sort_arg):
+def sort(table, n, sort_arg):
     '''
     Quicksort algorithm is implemented in this function,
     It takes 3 arguments: dictionary, number of stars,
     and the characteristic by which table will be sorted.
     '''
-    if n<=1:
+    if n <= 1:
         return table
     pivot = table[sort_arg][n//2]
     left = {}
@@ -60,17 +58,17 @@ def sort(table,n,sort_arg):
         middle[i] = []
         right[i] = []
         ans[i] = []
-    for id in range(n):
-        x = table[sort_arg][id]
-        if x<pivot:
+    for k in range(n):
+        x = table[sort_arg][k]
+        if x < pivot:
             for i in characteristics:
-                left[i].append(table[i][id])
+                left[i].append(table[i][k])
         elif x == pivot:
             for i in characteristics:
-                middle[i].append(table[i][id])
+                middle[i].append(table[i][k])
         else:
             for i in characteristics:
-                right[i].append(table[i][id])
+                right[i].append(table[i][k])
 
     left = sort(left, len(left[sort_arg]), sort_arg)
     right = sort(right, len(right[sort_arg]), sort_arg)
@@ -90,24 +88,23 @@ class DataFilter:
         global star_cnt
         global characteristics
         print("Data Filter process is started")
-        inp = get_input.GetInput()
-        inp.input()
+        inp = get_input.get_in()
         start_time = time.time()
-        table = inp.read_store('cleaned_stars.tsv')
+        table = get_input.read_store('cleaned_stars.tsv')
         table_0 = table
-        characteristics = ['id','phot_g_mean_mag']
+        characteristics = ['id', 'phot_g_mean_mag']
 
         # filter by FOV
         table = filter_by_fov(table, float(inp.ra), float(inp.dec), float(inp.fov_h), float(inp.fov_v))
 
-        table = sort(table,star_cnt,'phot_g_mean_mag') # sort stars by magnitude
+        table = sort(table, star_cnt, 'phot_g_mean_mag') # sort stars by magnitude
 
         '''
         This statement checks if we have more than N stars left,
         if we do, we need to take the brightest N ones
         '''
-        if inp.N<star_cnt:
-            star_cnt = inp.N
+        if inp.n < star_cnt:
+            star_cnt = inp.n
             for it in characteristics:
                 table[it] = table[it][0:star_cnt]
 
@@ -119,12 +116,13 @@ class DataFilter:
         table['dist'] = []
         characteristics.append('dist')
         for i in range(star_cnt):
-            table['dist'].append(star.ang_dist(star.Star(inp.ra,inp.dec),
-                                     star.Star(float(table_0['ra_ep2000'][table['id'][i]]),float(table_0['dec_ep2000'][table['id'][i]]))))
+            table['dist'].append(star.ang_dist(star.Star(inp.ra, inp.dec),
+                                 star.Star(float(table_0['ra_ep2000'][table['id'][i]]),
+                                           float(table_0['dec_ep2000'][table['id'][i]]))))
 
-        table = sort(table,star_cnt,'dist')
+        table = sort(table, star_cnt, 'dist')
 
-        inp.write(table,table_0, star_cnt, str(str(datetime.now())+'.csv'))
+        get_input.write(table, table_0, star_cnt, str(str(datetime.now())+'.csv'))
 
         end_time = time.time()
-        print('Execution time: ',end_time-start_time, 'Sec')
+        print('Execution time: ', end_time-start_time, 'Sec')

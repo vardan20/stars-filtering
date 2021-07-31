@@ -3,7 +3,7 @@ import math
 
 class Star:
 
-    def __init__(self, ra = 0, dec = 0):
+    def __init__(self, ra=0, dec=0):
         self.ra = float(ra)
         self.dec = float(dec)
 
