@@ -1,4 +1,4 @@
-import get_input
+import in_out
 import star
 import time
 from datetime import datetime
@@ -88,9 +88,9 @@ class DataFilter:
         global star_cnt
         global characteristics
         print("Data Filter process is started")
-        inp = get_input.get_in()
+        inp = in_out.get_in()
         start_time = time.time()
-        table = get_input.read_store('cleaned_stars.tsv')
+        table = in_out.read_store('cleaned_stars.tsv')
         table_0 = table
         characteristics = ['id', 'phot_g_mean_mag']
 
@@ -122,7 +122,7 @@ class DataFilter:
 
         table = sort(table, star_cnt, 'dist')
 
-        get_input.write(table, table_0, star_cnt, str(str(datetime.now())+'.csv'))
+        in_out.write(table, table_0, star_cnt, str(str(datetime.now())+'.csv'))
 
         end_time = time.time()
         print('Execution time: ', end_time-start_time, 'Sec')
