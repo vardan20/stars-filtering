@@ -32,25 +32,34 @@ def read_store(dct, filename):
     """
     The read_store() method takes a filename as a parameter,
     and stores the information of that file in a
-    dictionary, and returns it.
+    dictionary.
     """
 
     with open(filename) as fd:
-        rd = csv.reader(fd, delimiter="\t", quotechar='"')
-        next(rd)
-        data_filter.characteristics = (next(rd))
-        data_filter.characteristics.append('id')
-        for cur_char in data_filter.characteristics:
-            dct[cur_char] = []
-        for row in rd:
-            dct['id'].append(data_filter.star_cnt)
-            char_id = 0
-            data_filter.star_cnt += 1
-            for cur_char in data_filter.characteristics:
-                if cur_char == 'id':
-                    continue
-                dct[cur_char].append(row[char_id])
-                char_id += 1
+        id_n = 0
+        for i in fd:
+            item = i.split('\t')
+            if id_n == 0:
+                id_n += 1
+                continue
+
+            if id_n == 1:
+                data_filter.characteristics.append('id')
+                data_filter.characteristics.append('ra_ep2000')
+                data_filter.characteristics.append('dec_ep2000')
+                data_filter.characteristics.append('source_id')
+                data_filter.characteristics.append('phot_g_mean_mag')
+
+                for cur_char in data_filter.characteristics:
+                    dct[cur_char] = []
+            else:
+                dct['id'].append(data_filter.star_cnt)
+                data_filter.star_cnt += 1
+                dct['ra_ep2000'].append(item[0])
+                dct['dec_ep2000'].append(item[1])
+                dct['source_id'].append(item[7])
+                dct['phot_g_mean_mag'].append(item[22])
+            id_n += 1
 
 
 def write(table, table_0, n, filename):
