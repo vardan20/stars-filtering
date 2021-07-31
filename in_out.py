@@ -28,7 +28,7 @@ def get_in() -> InputData:
     return InputData(ra, dec, fov_h, fov_v, n)
 
 
-def read_store(filename):
+def read_store(dct, filename):
     """
     The read_store() method takes a filename as a parameter,
     and stores the information of that file in a
@@ -40,7 +40,6 @@ def read_store(filename):
         next(rd)
         data_filter.characteristics = (next(rd))
         data_filter.characteristics.append('id')
-        dct = {}
         for cur_char in data_filter.characteristics:
             dct[cur_char] = []
         for row in rd:
@@ -52,8 +51,6 @@ def read_store(filename):
                     continue
                 dct[cur_char].append(row[char_id])
                 char_id += 1
-
-    return dct
 
 
 def write(table, table_0, n, filename):

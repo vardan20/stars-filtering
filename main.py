@@ -2,8 +2,7 @@ import data_filter
 
 
 def main():
-    d = data_filter.DataFilter()
-    d.run()
+    data_filter.run()
 
 
 if __name__ == '__main__':
