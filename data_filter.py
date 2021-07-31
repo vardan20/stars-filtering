@@ -12,38 +12,6 @@ characteristics = []  #all characteristics of stars, such as RA, DEC, etc.
 star_cnt = 0  #number of stars in table
 
 
-def filter_by_fov(table, ra: float, dec: float, fov_h: float, fov_v: float):
-    '''
-    The filter_by_fov function filters the table of stars
-    and keeps the stars which are located in given FOV
-    '''
-    global star_cnt
-    table_modifed = {}
-    star_cnt_new = 0
-    for x in characteristics:
-        table_modifed[x] = []
-    for i in range(star_cnt):
-        # d1 is the RA distance between the given coordinate and i-th star
-        d1 = abs(float(table['ra_ep2000'][i])-ra)
-        if d1 > 180:
-            d1 = 360-d1
-        # d2 is the DEC distance between the given coordinate and i-th star
-        d2 = abs(float(table['dec_ep2000'][i])-dec)
-
-        # this two if-statements check if i-th star is in FOV or not
-        if d1 > fov_h/2:
-            continue
-        if d2 > fov_v/2:
-            continue
-        star_cnt_new += 1
-
-        for x in characteristics:
-            table_modifed[x].append(table[x][i])
-
-    star_cnt = star_cnt_new
-    return table_modifed
-
-
 def sort(table, n, sort_arg):
     '''
     Quicksort algorithm is implemented in this function,
@@ -95,12 +63,10 @@ def run():
     inp = in_out.get_in()
     start_time = time.time()
     table = {}
-    in_out.read_store(table, config['DEFAULT']['file_name'])
+    in_out.read_store(table, config['DEFAULT']['file_name'], inp.ra, inp.dec, inp.fov_h, inp.fov_v)
     table_0 = table
-    characteristics = ['id', 'phot_g_mean_mag']
 
     # filter by FOV
-    table = filter_by_fov(table, float(inp.ra), float(inp.dec), float(inp.fov_h), float(inp.fov_v))
 
     table = sort(table, star_cnt, 'phot_g_mean_mag') # sort stars by magnitude
 
@@ -122,8 +88,8 @@ def run():
     characteristics.append('dist')
     for i in range(star_cnt):
         table['dist'].append(star.ang_dist(star.Star(inp.ra, inp.dec),
-                             star.Star(float(table_0['ra_ep2000'][table['id'][i]]),
-                                       float(table_0['dec_ep2000'][table['id'][i]]))))
+                             star.Star(float(table['ra_ep2000'][i]),
+                                       float(table['dec_ep2000'][i]))))
 
     table = sort(table, star_cnt, 'dist')
 

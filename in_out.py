@@ -22,13 +22,15 @@ class InputData:
 
 def get_in() -> InputData:
     # takes all required input from user
-    ra, dec = input("Please Enter equatorial coordinates (ra, dec): ").split()
-    fov_h, fov_v = input("Please Enter horizontal and vertical FOV: ").split()
+    print("Please Enter equatorial coordinates (ra, dec):", end=' ')
+    ra, dec = map(float, input().split())
+    print("Please Enter horizontal and vertical FOV:", end=' ')
+    fov_h, fov_v = map(float, input().split())
     n = int(input("Please Enter the number of Stars N: "))
     return InputData(ra, dec, fov_h, fov_v, n)
 
 
-def read_store(dct, filename):
+def read_store(dct, filename, ra, dec, fov_h, fov_v):
     """
     The read_store() method takes a filename as a parameter,
     and stores the information of that file in a
@@ -53,12 +55,27 @@ def read_store(dct, filename):
                 for cur_char in data_filter.characteristics:
                     dct[cur_char] = []
             else:
-                dct['id'].append(data_filter.star_cnt)
+                """d1 is the RA distance between the given coordinate and i-th star"""
+                d1 = abs(float(item[0]) - ra)
+                if d1 > 180:
+                    d1 = 360 - d1
+                """d2 is the DEC distance between the given coordinate and i-th star"""
+                d2 = abs(float(item[1]) - dec)
+                """this two if-statements check if i-th star is in FOV or not"""
+                if d1 > fov_h / 2:
+                    id_n += 1
+                    continue
+                if d2 > fov_v / 2:
+                    id_n += 1
+                    continue
+
+                dct['id'].append(id_n-2)
                 data_filter.star_cnt += 1
                 dct['ra_ep2000'].append(item[0])
                 dct['dec_ep2000'].append(item[1])
                 dct['source_id'].append(item[7])
                 dct['phot_g_mean_mag'].append(item[22])
+
             id_n += 1
 
 
@@ -72,10 +89,9 @@ def write(table, table_0, n, filename):
     writer = csv.writer(f)
     row = ['id', 'source_id', 'ra_ep2000', 'dec_ep2000', 'phot_g_mean_mag', 'angular_distance']
     writer.writerow(row)
-    table['source_id'] = []
     for i in range(n):
-        row = [table['id'][i], table_0['source_id'][table['id'][i]],
-               table_0['ra_ep2000'][table['id'][i]], table_0['dec_ep2000'][table['id'][i]],
+        row = [table['id'][i], table['source_id'][i],
+               table['ra_ep2000'][i], table['dec_ep2000'][i],
                table['phot_g_mean_mag'][i], table['dist'][i]]
         writer.writerow(row)
     f.close()
