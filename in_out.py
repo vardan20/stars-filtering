@@ -21,15 +21,15 @@ class InputData:
 
 def get_in() -> InputData:
     # takes all required input from user
-    print("Please Enter equatorial coordinates (ra, dec):", end=' ')
+    print("Please Enter equatorial coordinates, please separate them with a whitespace:", end=' ')
     ra, dec = map(float, input().split())
-    print("Please Enter horizontal and vertical FOV:", end=' ')
+    print("Please Enter horizontal and vertical FOV, please separate them with a whitespace:", end=' ')
     fov_h, fov_v = map(float, input().split())
     n = int(input("Please Enter the number of Stars N: "))
     return InputData(ra, dec, fov_h, fov_v, n)
 
 
-def read_store(dct, filename, ra, dec, fov_h, fov_v):
+def read_store(dct: dict, filename: str, ra: float, dec: float, fov_h: float, fov_v: float) -> None:
     """
     The read_store() method takes a filename as a parameter,
     and stores the information of that file in a
@@ -70,15 +70,15 @@ def read_store(dct, filename, ra, dec, fov_h, fov_v):
 
                 dct['id'].append(id_n-2)
                 data_filter.star_cnt += 1
-                dct['ra_ep2000'].append(item[0])
-                dct['dec_ep2000'].append(item[1])
-                dct['source_id'].append(item[7])
-                dct['phot_g_mean_mag'].append(item[22])
+                dct['ra_ep2000'].append(float(item[0]))
+                dct['dec_ep2000'].append(float(item[1]))
+                dct['source_id'].append(float(item[7]))
+                dct['phot_g_mean_mag'].append(float(item[22]))
 
             id_n += 1
 
 
-def write(table, n, filename):
+def write(table: dict, n: int, filename: str) -> None:
     """
     write method take data from the filtered table and
     writes it in filename.csv file

@@ -8,7 +8,7 @@ class Star:
         self.dec = float(dec)
 
 
-def ang_dist(s1: Star, s2: Star):
+def ang_dist(s1: Star, s2: Star) -> float:
     '''
     ang_dist() function takes coordinates of two stars,
     and returns angular distance between them

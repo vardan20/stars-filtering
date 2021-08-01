@@ -12,7 +12,7 @@ characteristics = []  #all characteristics of stars, such as RA, DEC, etc.
 star_cnt = 0  #number of stars in table
 
 
-def sort(table, n, sort_arg):
+def sort(table: dict, n: int, sort_arg: str) -> dict:
     '''
     Quicksort algorithm is implemented in this function,
     It takes 3 arguments: dictionary, number of stars,
@@ -49,7 +49,7 @@ def sort(table, n, sort_arg):
     return ans
 
 
-def run():
+def run() -> None:
     """
     run method starts filtering process.
     All filtering functions are called here,
@@ -64,7 +64,6 @@ def run():
     start_time = time.time()
     table = {}
     in_out.read_store(table, config['DEFAULT']['file_name'], inp.ra, inp.dec, inp.fov_h, inp.fov_v)
-    table_0 = table
 
     # filter by FOV
 
@@ -87,9 +86,10 @@ def run():
     table['dist'] = []
     characteristics.append('dist')
     for i in range(star_cnt):
-        table['dist'].append(star.ang_dist(star.Star(inp.ra, inp.dec),
-                             star.Star(float(table['ra_ep2000'][i]),
-                                       float(table['dec_ep2000'][i]))))
+        star1 = star.Star(inp.ra, inp.dec)
+        star2 = star.Star((table['ra_ep2000'][i]), (table['dec_ep2000'][i]))
+        dist = star.ang_dist(star1, star2)
+        table['dist'].append(dist)
 
     table = sort(table, star_cnt, 'dist')
 
