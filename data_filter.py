@@ -7,9 +7,10 @@ from configparser import ConfigParser
 config = ConfigParser()
 config.read('config.ini')
 
-
-characteristics = []  #all characteristics of stars, such as RA, DEC, etc.
-star_cnt = 0  #number of stars in table
+"""all characteristics of stars, such as RA, DEC, etc."""
+characteristics = []
+"""number of stars in table"""
+star_cnt = 0
 
 
 def sort(table: dict, n: int, sort_arg: str) -> dict:

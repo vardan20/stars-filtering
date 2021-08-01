@@ -20,7 +20,7 @@ class InputData:
 
 
 def get_in() -> InputData:
-    # takes all required input from user
+    """takes all required input from user"""
     print("Please Enter equatorial coordinates, please separate them with a whitespace:", end=' ')
     ra, dec = map(float, input().split())
     print("Please Enter horizontal and vertical FOV, please separate them with a whitespace:", end=' ')
