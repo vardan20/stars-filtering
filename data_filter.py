@@ -14,11 +14,11 @@ star_cnt = 0
 
 
 def sort(table: dict, n: int, sort_arg: str) -> dict:
-    '''
+    """
     Quicksort algorithm is implemented in this function,
     It takes 3 arguments: dictionary, number of stars,
     and the characteristic by which table will be sorted.
-    '''
+    """
     if n <= 1:
         return table
     pivot = table[sort_arg][n//2]
@@ -66,9 +66,8 @@ def run() -> None:
     table = {}
     in_out.read_store(table, config['DEFAULT']['file_name'], inp.ra, inp.dec, inp.fov_h, inp.fov_v)
 
-    # filter by FOV
-
-    table = sort(table, star_cnt, 'phot_g_mean_mag') # sort stars by magnitude
+    """sort stars by magnitude"""
+    table = sort(table, star_cnt, 'phot_g_mean_mag')
 
     '''
     This statement checks if we have more than N stars left,
