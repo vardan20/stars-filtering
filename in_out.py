@@ -1,4 +1,3 @@
-import csv
 import data_filter
 
 
@@ -79,19 +78,23 @@ def read_store(dct, filename, ra, dec, fov_h, fov_v):
             id_n += 1
 
 
-def write(table, table_0, n, filename):
+def write(table, n, filename):
     """
     write method take data from the filtered table and
     writes it in filename.csv file
     """
 
-    f = open(filename, 'w')
-    writer = csv.writer(f)
-    row = ['id', 'source_id', 'ra_ep2000', 'dec_ep2000', 'phot_g_mean_mag', 'angular_distance']
-    writer.writerow(row)
-    for i in range(n):
-        row = [table['id'][i], table['source_id'][i],
-               table['ra_ep2000'][i], table['dec_ep2000'][i],
-               table['phot_g_mean_mag'][i], table['dist'][i]]
-        writer.writerow(row)
-    f.close()
+    with open(filename, 'w') as f:
+        row = ['id', 'source_id', 'ra_ep2000', 'dec_ep2000', 'phot_g_mean_mag', 'angular_distance']
+        for i in row[:-1]:
+            f.write(i+',')
+        f.write(row[-1])
+        f.write('\n')
+        for i in range(n):
+            row = [table['id'][i], table['source_id'][i],
+                   table['ra_ep2000'][i], table['dec_ep2000'][i],
+                   table['phot_g_mean_mag'][i], table['dist'][i]]
+            for j in row[:-1]:
+                f.write(str(j)+',')
+            f.write(str(row[-1]))
+            f.write('\n')

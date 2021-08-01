@@ -93,7 +93,7 @@ def run():
 
     table = sort(table, star_cnt, 'dist')
 
-    in_out.write(table, table_0, star_cnt, str(str(datetime.now())+'.csv'))
+    in_out.write(table, star_cnt, str(str(datetime.now())+'.csv'))
 
     end_time = time.time()
     print('Execution time: ', end_time-start_time, 'Sec')
